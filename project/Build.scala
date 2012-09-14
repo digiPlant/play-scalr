@@ -1,0 +1,98 @@
+import sbt._
+import Keys._
+
+object Plugin extends Build {
+
+  lazy val buildVersion = "0.1-SNAPSHOT"
+  lazy val playVersion = "2.1-SNAPSHOT"
+
+  lazy val res = Project(
+    id = "play-scalr",
+    base = file("."),
+    settings = Project.defaultSettings ++ Publish.settings ++ Ls.settings
+  ).settings(
+    organization := "se.digiplant",
+    version := buildVersion,
+    scalaVersion := "2.9.2",
+    shellPrompt := ShellPrompt.buildShellPrompt,
+
+    // Use when developing against a locally built play master
+    resolvers ++= Seq(
+      Resolver.file("Local Play Repository", file(Path.userHome.absolutePath + "/Lib/play2/repository/local"))(Resolver.ivyStylePatterns),
+      "Sonatype Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/",
+      "Typesafe Releases" at "http://repo.typesafe.com/typesafe/releases/",
+      "Typesafe Snapshots" at "http://repo.typesafe.com/typesafe/snapshots/"
+    ),
+
+    libraryDependencies ++= Seq(
+      "play" %% "play" % playVersion % "provided",
+      "play" %% "play-test" % playVersion % "test",
+      "org.imgscalr" % "imgscalr-lib" % "4.2",
+      "commons-io" % "commons-io" % "2.4",
+      "se.digiplant" %% "play-res" % "0.1-SNAPSHOT"
+    )
+  )
+}
+
+object Publish {
+  lazy val settings = Seq(
+    publishMavenStyle := true,
+    publishTo <<= version { (v: String) =>
+      val nexus = "https://oss.sonatype.org/"
+      if (v.trim.endsWith("SNAPSHOT"))
+        Some("snapshots" at nexus + "content/repositories/snapshots")
+      else
+        Some("releases"  at nexus + "service/local/staging/deploy/maven2")
+    },
+    publishArtifact in Test := false,
+    pomIncludeRepository := { _ => false },
+    licenses := Seq("Apache 2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
+    homepage := Some(url("https://github.com/digiPlant/play-scalr")),
+    pomExtra := (
+      <scm>
+        <url>git://github.com/digiPlant/play-scalr.git</url>
+        <connection>scm:git://github.com/digiPlant/play-scalr.git</connection>
+      </scm>
+        <developers>
+          <developer>
+            <id>leon</id>
+            <name>Leon Radley</name>
+            <url>http://github.com/leon</url>
+          </developer>
+        </developers>)
+  )
+}
+
+// Shell prompt which show the current project, git branch and build version
+object ShellPrompt {
+  object devnull extends ProcessLogger {
+    def info (s: => String) {}
+    def error (s: => String) { }
+    def buffer[T] (f: => T): T = f
+  }
+  def currBranch = (
+    ("git status -sb" lines_! devnull headOption)
+      getOrElse "-" stripPrefix "## "
+    )
+
+  val buildShellPrompt = {
+    (state: State) => {
+      val currProject = Project.extract (state).currentProject.id
+      "%s:%s:%s> ".format (
+        currProject, currBranch, Plugin.buildVersion
+      )
+    }
+  }
+}
+
+object Ls {
+
+  import _root_.ls.Plugin.LsKeys._
+
+  lazy val settings = _root_.ls.Plugin.lsSettings ++ Seq(
+    (description in lsync) := "Scalr plugin for Play Framework 2",
+    licenses in lsync <<= licenses,
+    (tags in lsync) := Seq("play", "scalr"),
+    (docsUrl in lsync) := Some(new URL("https://github.com/digiPlant/play-scalr/wiki"))
+  )
+}

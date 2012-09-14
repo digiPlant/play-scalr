@@ -1,0 +1,8 @@
+*.
+!.gitignore
+!.travis.yml
+
+tmp
+target
+
+/project/sonatype.sbt
