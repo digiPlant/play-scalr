@@ -37,7 +37,7 @@ object ScalrResourceAssets extends Controller {
    * @param source play-res source
    * @return A resized image
    */
-  def at(fileuid: String, width: Int, height: Int, mode: String = "automatic", source: String = "default"): Action[AnyContent] = Action { request =>
+  def at(fileuid: String, width: Int, height: Int = 0, mode: String = "automatic", source: String = "default"): Action[AnyContent] = Action { request =>
 
     val modeEnum: org.imgscalr.Scalr.Mode = org.imgscalr.Scalr.Mode.valueOf(mode.toUpperCase)
 
@@ -51,7 +51,7 @@ object ScalrResourceAssets extends Controller {
       }
     }
 
-    Scalr.getResource(fileuid, source, width, height, org.imgscalr.Scalr.Method.ULTRA_QUALITY, modeEnum).map { resizedImage =>
+    Scalr.getResource(fileuid, source, width, height, modeEnum, org.imgscalr.Scalr.Method.ULTRA_QUALITY).map { resizedImage =>
       request.headers.get(IF_NONE_MATCH).flatMap {
         ifNoneMatch => etagFor(resizedImage).filter(_ == ifNoneMatch)
       }.map(_ => NotModified).getOrElse {

@@ -20,11 +20,11 @@ class ScalrPlugin(implicit app: Application) extends Plugin {
    * @param file The filePath relative to the path variable (the same as the play Assets Controller)
    * @param width The width of the frame that we want the image to fit within
    * @param height The height of the frame that we want the image to fit within
-   * @param method Any of the Scalr Methods, The standard is the highest possible
    * @param mode Any of the Scale modes such as AUTOMATIC, FIT_TO_WIDTH, FIT_TO_HEIGHT
+   * @param method Any of the Scalr Methods, The standard is the highest possible
    * @return a File if everything when well
    */
-  def get(path: String, file: String, width: Int, height: Int, method: org.imgscalr.Scalr.Method = org.imgscalr.Scalr.Method.ULTRA_QUALITY, mode: org.imgscalr.Scalr.Mode = org.imgscalr.Scalr.Mode.AUTOMATIC): Option[File] = {
+  def get(path: String, file: String, width: Int, height: Int, mode: org.imgscalr.Scalr.Mode = org.imgscalr.Scalr.Mode.AUTOMATIC, method: org.imgscalr.Scalr.Method = org.imgscalr.Scalr.Method.ULTRA_QUALITY): Option[File] = {
 
     val resourceName = Option(path + "/" + file).map(name => if (name.startsWith("/")) name else ("/" + name)).get
     val resourceFile = app.getFile(resourceName)
@@ -41,7 +41,7 @@ class ScalrPlugin(implicit app: Application) extends Plugin {
       cachedImage.map { cachedImage =>
         Some(cachedImage)
       }.getOrElse {
-        val resizedImage = resize(resourceFile, width, height, method, mode)
+        val resizedImage = resize(resourceFile, width, height, mode, method)
         val resizedFilePath = Resource.saveWithMeta(
           resizedImage,
           filePath = FilenameUtils.concat(cachePath, file),
@@ -58,11 +58,11 @@ class ScalrPlugin(implicit app: Application) extends Plugin {
    * @param source The play-res source name
    * @param width The width of the frame that we want the image to fit within
    * @param height The height of the frame that we want the image to fit within
-   * @param method Any of the Scalr Methods, The standard is the highest possible
    * @param mode Any of the Scale modes such as AUTOMATIC, FIT_TO_WIDTH, FIT_TO_HEIGHT
+   * @param method Any of the Scalr Methods, The standard is the highest possible
    * @return a File if everything when well
    */
-  def getResource(fileuid: String, source: String = "default", width: Int, height: Int, method: org.imgscalr.Scalr.Method = org.imgscalr.Scalr.Method.ULTRA_QUALITY, mode: org.imgscalr.Scalr.Mode = org.imgscalr.Scalr.Mode.AUTOMATIC): Option[File] = {
+  def getResource(fileuid: String, source: String = "default", width: Int, height: Int, mode: org.imgscalr.Scalr.Mode = org.imgscalr.Scalr.Mode.AUTOMATIC, method: org.imgscalr.Scalr.Method = org.imgscalr.Scalr.Method.ULTRA_QUALITY): Option[File] = {
 
     Resource.get(fileuid, source).flatMap { res =>
 
@@ -77,7 +77,7 @@ class ScalrPlugin(implicit app: Application) extends Plugin {
       cachedImage.map { cachedImage =>
         Some(cachedImage)
       }.getOrElse {
-        val resizedImage = resize(res, width, height, method, mode)
+        val resizedImage = resize(res, width, height, mode, method)
         val maybeFileUID = Resource.put(
           resizedImage,
           cacheSource,
@@ -94,11 +94,11 @@ class ScalrPlugin(implicit app: Application) extends Plugin {
    * @param file The file to resize
    * @param width The width of the frame that we want the image to fit within
    * @param height The height of the frame that we want the image to fit within
-   * @param method Any of the Scalr Methods, The standard is the highest possible
    * @param mode Any of the Scale modes such as AUTOMATIC, FIT_TO_WIDTH, FIT_TO_HEIGHT
+   * @param method Any of the Scalr Methods, The standard is the highest possible
    * @return A resized file
    */
-  def resize(file: File, width: Int, height: Int, method: org.imgscalr.Scalr.Method = org.imgscalr.Scalr.Method.ULTRA_QUALITY, mode: org.imgscalr.Scalr.Mode = org.imgscalr.Scalr.Mode.AUTOMATIC): File = {
+  def resize(file: File, width: Int, height: Int, mode: org.imgscalr.Scalr.Mode = org.imgscalr.Scalr.Mode.AUTOMATIC, method: org.imgscalr.Scalr.Method = org.imgscalr.Scalr.Method.ULTRA_QUALITY): File = {
     val image = ImageIO.read(file)
     //val resized = org.imgscalr.Scalr.resize(image, method, mode, width, height, org.imgscalr.Scalr.OP_ANTIALIAS)
     val resized = org.imgscalr.Scalr.resize(image, method, mode, width, height)
@@ -113,11 +113,11 @@ class ScalrPlugin(implicit app: Application) extends Plugin {
    * @param file The file to resize
    * @param width The width of the frame that we want the image to fit within
    * @param height The height of the frame that we want the image to fit within
-   * @param method Any of the Scalr Methods, The standard is the highest possible
    * @param mode Any of the Scale modes such as AUTOMATIC, FIT_TO_WIDTH, FIT_TO_HEIGHT
+   * @param method Any of the Scalr Methods, The standard is the highest possible
    * @return A stream that we can pipe directly to the browser
    */
-  def resizeToStream(file: File, width: Int, height: Int, method: org.imgscalr.Scalr.Method = org.imgscalr.Scalr.Method.ULTRA_QUALITY, mode: org.imgscalr.Scalr.Mode = org.imgscalr.Scalr.Mode.AUTOMATIC): OutputStream = {
+  def resizeToStream(file: File, width: Int, height: Int, mode: org.imgscalr.Scalr.Mode = org.imgscalr.Scalr.Mode.AUTOMATIC, method: org.imgscalr.Scalr.Method = org.imgscalr.Scalr.Method.ULTRA_QUALITY): OutputStream = {
     val image = ImageIO.read(file)
     //val resized = org.imgscalr.Scalr.resize(image, method, mode, width, height, org.imgscalr.Scalr.OP_ANTIALIAS)
     val resized = org.imgscalr.Scalr.resize(image, method, mode, width, height)

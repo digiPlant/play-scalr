@@ -18,12 +18,12 @@ object Scalr {
    * @param file The filePath relative to the path variable (the same as the play Assets Controller)
    * @param width The width of the frame that we want the image to fit within
    * @param height The height of the frame that we want the image to fit within
-   * @param method Any of the Scalr Methods, The standard is the highest possible
    * @param mode Any of the Scale modes such as AUTOMATIC, FIT_TO_WIDTH, FIT_TO_HEIGHT
+   * @param method Any of the Scalr Methods, The standard is the highest possible
    * @return a File if everything when well
    */
-  def get(path: String, file: String, width: Int, height: Int, method: org.imgscalr.Scalr.Method = org.imgscalr.Scalr.Method.ULTRA_QUALITY, mode: org.imgscalr.Scalr.Mode = org.imgscalr.Scalr.Mode.AUTOMATIC)(implicit app: Application): Option[File] = {
-    scalrAPI.get(path, file, width, height, method, mode)
+  def get(path: String, file: String, width: Int, height: Int, mode: org.imgscalr.Scalr.Mode = org.imgscalr.Scalr.Mode.AUTOMATIC, method: org.imgscalr.Scalr.Method = org.imgscalr.Scalr.Method.ULTRA_QUALITY)(implicit app: Application): Option[File] = {
+    scalrAPI.get(path, file, width, height, mode, method)
   }
 
   /**
@@ -32,11 +32,11 @@ object Scalr {
    * @param source The play-res source name
    * @param width The width of the frame that we want the image to fit within
    * @param height The height of the frame that we want the image to fit within
-   * @param method Any of the Scalr Methods, The standard is the highest possible
    * @param mode Any of the Scale modes such as AUTOMATIC, FIT_TO_WIDTH, FIT_TO_HEIGHT
+   * @param method Any of the Scalr Methods, The standard is the highest possible
    * @return a File if everything when well
    */
-  def getResource(fileuid: String, source: String = "default", width: Int, height: Int, method: org.imgscalr.Scalr.Method = org.imgscalr.Scalr.Method.ULTRA_QUALITY, mode: org.imgscalr.Scalr.Mode = org.imgscalr.Scalr.Mode.AUTOMATIC)(implicit app: Application): Option[File] = {
-    scalrAPI.getResource(fileuid, source, width, height, method, mode)
+  def getResource(fileuid: String, source: String = "default", width: Int, height: Int, mode: org.imgscalr.Scalr.Mode = org.imgscalr.Scalr.Mode.AUTOMATIC, method: org.imgscalr.Scalr.Method = org.imgscalr.Scalr.Method.ULTRA_QUALITY)(implicit app: Application): Option[File] = {
+    scalrAPI.getResource(fileuid, source, width, height, mode, method)
   }
 }

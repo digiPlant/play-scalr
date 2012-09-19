@@ -36,7 +36,7 @@ object ScalrAssets extends Controller {
    * @param mode AUTOMATIC, FIT_EXACT, FIT_TO_WIDTH, FIT_TO_HEIGHT
    * @return A resized image
    */
-  def at(path: String, file: String, width: Int, height: Int, mode: String = "automatic"): Action[AnyContent] = Action { request =>
+  def at(path: String, file: String, width: Int, height: Int = 0, mode: String = "automatic"): Action[AnyContent] = Action { request =>
 
     val modeEnum: org.imgscalr.Scalr.Mode = org.imgscalr.Scalr.Mode.valueOf(mode.toUpperCase)
 
@@ -50,7 +50,7 @@ object ScalrAssets extends Controller {
       }
     }
 
-    Scalr.get(path, file, width, height, org.imgscalr.Scalr.Method.ULTRA_QUALITY, modeEnum).map { resizedImage =>
+    Scalr.get(path, file, width, height, modeEnum, org.imgscalr.Scalr.Method.ULTRA_QUALITY).map { resizedImage =>
       request.headers.get(IF_NONE_MATCH).flatMap {
         ifNoneMatch => etagFor(resizedImage).filter(_ == ifNoneMatch)
       }.map(_ => NotModified).getOrElse {
