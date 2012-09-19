@@ -1,47 +1,47 @@
-package se.digiplant.resource.api
+package se.digiplant.scalr.api
 
-import org.specs2.specification.{Scope, Around}
-import play.api._
+import org.specs2.specification.{BeforeAfterAround, Scope}
+import org.specs2.execute.Result
 import play.api.test._
 import play.api.test.Helpers._
 import java.io.File
 import org.apache.commons.io.FileUtils
 import util.Random
-import se.digiplant.scalr.api.ScalrPlugin
+import se.digiplant.resource.api.ResourcePlugin
 
-trait FakeApp extends Around with Scope with FileSystemScope {
-
-  val plugins = Seq(
+class ScalrContext(val app: FakeApplication = new FakeApplication(
+  additionalPlugins = Seq(
     "se.digiplant.resource.api.ResourcePlugin",
     "se.digiplant.scalr.api.ScalrPlugin"
-  )
-
-  val configuration = Map(
+  ),
+  additionalConfiguration = Map(
     ("res.default" -> "tmp/default"),
     ("res.scalrcache" -> "tmp/scalrcache"),
-    ("scalr.cache" -> "scalrcache")
+    ("scalr.cache" -> "scalrcache"),
+    ("scalr.cachedir" -> "tmp/scalrcachedir")
   )
+)) extends BeforeAfterAround with TempFile {
+
+  implicit val implicitApp = app
 
   lazy val res = app.plugin[ResourcePlugin].get
-
   lazy val scalr = app.plugin[ScalrPlugin].get
 
-  implicit object app extends FakeApplication(
-    additionalPlugins = plugins,
-    additionalConfiguration = configuration
-  )
+  def around[T](t: => T)(implicit evidence$1: (T) => Result) = running(app)(t)
 
-  def around[T <% org.specs2.execute.Result](test: => T) = running(app) {
-    test
+  def before {
+  }
+
+  def after {
+    tmp.delete()
   }
 }
 
-trait FileSystemScope extends Scope {
+trait TempFile extends Scope {
   val tmp = new File("tmp")
   val logo = new File("src/test/resources/digiPlant.jpg")
 
   def getTestFile(): File = {
-    tmp.delete()
     tmp.mkdir()
     val chars = ('a' to 'z') ++ ('A' to 'Z') ++ ('1' to '9')
     val rand = (1 to 20).map(x => chars(Random.nextInt(chars.length))).mkString
@@ -50,5 +50,3 @@ trait FileSystemScope extends Scope {
     tmpFile
   }
 }
-
-object Files extends FileSystemScope

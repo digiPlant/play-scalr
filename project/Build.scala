@@ -16,20 +16,23 @@ object Plugin extends Build {
     scalaVersion := "2.9.2",
     shellPrompt := ShellPrompt.buildShellPrompt,
 
+    testFrameworks += TestFrameworks.Specs2,
+    parallelExecution in Test := false,
+
     // Use when developing against a locally built play master
     resolvers ++= Seq(
       Resolver.file("Local Play Repository", file(Path.userHome.absolutePath + "/Lib/play2/repository/local"))(Resolver.ivyStylePatterns),
-      "Sonatype Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/",
       "Typesafe Releases" at "http://repo.typesafe.com/typesafe/releases/",
-      "Typesafe Snapshots" at "http://repo.typesafe.com/typesafe/snapshots/"
-    ),
+      "Sonatype Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/"
+  ),
 
     libraryDependencies ++= Seq(
       "play" %% "play" % playVersion % "provided",
-      "play" %% "play-test" % playVersion % "test",
       "org.imgscalr" % "imgscalr-lib" % "4.2",
       "commons-io" % "commons-io" % "2.4",
-      "se.digiplant" %% "play-res" % "0.1-SNAPSHOT"
+      "se.digiplant" %% "play-res" % "0.1-SNAPSHOT",
+
+      "play" %% "play-test" % playVersion % "test"
     )
   )
 }

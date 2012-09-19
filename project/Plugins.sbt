@@ -1,5 +1,4 @@
 resolvers ++= Seq(
-  "sbt-idea-repo" at "http://mpeltonen.github.com/maven/",
   "less is" at "http://repo.lessis.me",
   "coda" at "http://repo.codahale.com"
 )
