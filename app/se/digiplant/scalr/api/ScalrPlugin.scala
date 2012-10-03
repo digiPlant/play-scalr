@@ -81,7 +81,7 @@ class ScalrPlugin(implicit app: Application) extends Plugin {
         val maybeFileUID = Res.put(
           resizedImage,
           cacheSource,
-          filename = res.getName,
+          filename = Some(res.getName),
           meta = Seq(width.toString, height.toString, mode.toString)
         )
         maybeFileUID.flatMap(uid => Res.get(uid, cacheSource))
