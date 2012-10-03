@@ -1,4 +1,4 @@
-package se.digiplant.scalr.api
+package se.digiplant.scalr
 
 import play.api._
 import play.api.mvc._
@@ -7,9 +7,10 @@ import org.joda.time.format.{DateTimeFormatter, DateTimeFormat}
 import org.joda.time.DateTimeZone
 import collection.JavaConverters._
 import java.io.File
+
 import play.api.Play.current
 
-object ScalrAssets extends Controller {
+object ScalrResAssets extends Controller {
 
   private val timeZoneCode = "GMT"
 
@@ -29,14 +30,14 @@ object ScalrAssets extends Controller {
 
   /**
    * Resize and cache images stored in play-res
-   * @param path Path relative to play app
-   * @param file Filepath of the file
+   * @param fileuid Fileuid of file stored in play-res
    * @param width Width of resized image
    * @param height Height of resized image
    * @param mode AUTOMATIC, FIT_EXACT, FIT_TO_WIDTH, FIT_TO_HEIGHT
+   * @param source play-res source
    * @return A resized image
    */
-  def at(path: String, file: String, width: Int, height: Int = 0, mode: String = "automatic"): Action[AnyContent] = Action { request =>
+  def at(fileuid: String, width: Int, height: Int = 0, mode: String = "automatic", source: String = "default"): Action[AnyContent] = Action { request =>
 
     val modeEnum: org.imgscalr.Scalr.Mode = org.imgscalr.Scalr.Mode.valueOf(mode.toUpperCase)
 
@@ -50,7 +51,7 @@ object ScalrAssets extends Controller {
       }
     }
 
-    Scalr.get(path, file, width, height, modeEnum, org.imgscalr.Scalr.Method.ULTRA_QUALITY).map { resizedImage =>
+    api.Scalr.getRes(fileuid, source, width, height, modeEnum, org.imgscalr.Scalr.Method.ULTRA_QUALITY).map { resizedImage =>
       request.headers.get(IF_NONE_MATCH).flatMap {
         ifNoneMatch => etagFor(resizedImage).filter(_ == ifNoneMatch)
       }.map(_ => NotModified).getOrElse {

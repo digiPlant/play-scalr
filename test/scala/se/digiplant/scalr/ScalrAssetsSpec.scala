@@ -1,4 +1,4 @@
-package se.digiplant.scalr.api
+package se.digiplant.scalr
 
 import org.specs2.mutable.Specification
 import play.api.test._
@@ -12,7 +12,7 @@ object ScalrAssetsSpec extends Specification {
       val ctx = new ScalrContext
       running(ctx.app) {
 
-        val result = ScalrAssets.at("/src/test/resources", "digiPlant.jpg", 50, 50)(FakeRequest())
+        val result = ScalrAssets.at("/test/resources", "digiPlant.jpg", 50, 50)(FakeRequest())
 
         status(result) must equalTo(OK)
         contentType(result) must beSome("image/jpeg")
@@ -23,7 +23,7 @@ object ScalrAssetsSpec extends Specification {
       val ctx = new ScalrContext
       running(ctx.app) {
 
-        val result = ScalrAssets.at("/src/test/resources", "subdir/test.jpg", 50, 50)(FakeRequest())
+        val result = ScalrAssets.at("/test/resources", "subdir/test.jpg", 50, 50)(FakeRequest())
 
         status(result) must equalTo(OK)
         contentType(result) must beSome("image/jpeg")

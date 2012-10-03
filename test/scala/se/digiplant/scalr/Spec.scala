@@ -1,4 +1,4 @@
-package se.digiplant.scalr.api
+package se.digiplant.scalr
 
 import org.specs2.specification.{BeforeAfterAround, Scope}
 import org.specs2.execute.Result
@@ -7,11 +7,13 @@ import play.api.test.Helpers._
 import java.io.File
 import org.apache.commons.io.FileUtils
 import util.Random
-import se.digiplant.resource.api.ResourcePlugin
+
+import se.digiplant.scalr.api.ScalrPlugin
+import se.digiplant.res.api.ResPlugin
 
 class ScalrContext(val app: FakeApplication = new FakeApplication(
   additionalPlugins = Seq(
-    "se.digiplant.resource.api.ResourcePlugin",
+    "se.digiplant.res.api.ResPlugin",
     "se.digiplant.scalr.api.ScalrPlugin"
   ),
   additionalConfiguration = Map(
@@ -24,10 +26,10 @@ class ScalrContext(val app: FakeApplication = new FakeApplication(
 
   implicit val implicitApp = app
 
-  lazy val res = app.plugin[ResourcePlugin].get
+  lazy val res = app.plugin[ResPlugin].get
   lazy val scalr = app.plugin[ScalrPlugin].get
 
-  def around[T](t: => T)(implicit evidence$1: (T) => Result) = running(app)(t)
+  def around[T](t: => T)(implicit evidence: (T) => Result) = running(app)(t)
 
   def before {
   }
@@ -39,7 +41,7 @@ class ScalrContext(val app: FakeApplication = new FakeApplication(
 
 trait TempFile extends Scope {
   val tmp = new File("tmp")
-  val logo = new File("src/test/resources/digiPlant.jpg")
+  val logo = new File("test/resources/digiPlant.jpg")
 
   def getTestFile(): File = {
     tmp.mkdir()

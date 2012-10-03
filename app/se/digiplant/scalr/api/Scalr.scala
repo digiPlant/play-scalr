@@ -36,7 +36,7 @@ object Scalr {
    * @param method Any of the Scalr Methods, The standard is the highest possible
    * @return a File if everything when well
    */
-  def getResource(fileuid: String, source: String = "default", width: Int, height: Int, mode: org.imgscalr.Scalr.Mode = org.imgscalr.Scalr.Mode.AUTOMATIC, method: org.imgscalr.Scalr.Method = org.imgscalr.Scalr.Method.ULTRA_QUALITY)(implicit app: Application): Option[File] = {
-    scalrAPI.getResource(fileuid, source, width, height, mode, method)
+  def getRes(fileuid: String, source: String = "default", width: Int, height: Int, mode: org.imgscalr.Scalr.Mode = org.imgscalr.Scalr.Mode.AUTOMATIC, method: org.imgscalr.Scalr.Method = org.imgscalr.Scalr.Method.ULTRA_QUALITY)(implicit app: Application): Option[File] = {
+    scalrAPI.getRes(fileuid, source, width, height, mode, method)
   }
 }

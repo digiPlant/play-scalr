@@ -1,40 +1,26 @@
 import sbt._
 import Keys._
+import PlayProject._
 
 object Plugin extends Build {
 
-  lazy val buildVersion = "0.1-SNAPSHOT"
-  lazy val playVersion = "2.1-SNAPSHOT"
+  val pluginName = "play-scalr"
+  val pluginVersion = "0.1-SNAPSHOT"
 
-  lazy val res = Project(
-    id = "play-scalr",
-    base = file("."),
-    settings = Project.defaultSettings ++ Publish.settings ++ Ls.settings
-  ).settings(
-    organization := "se.digiplant",
-    version := buildVersion,
-    scalaVersion := "2.9.2",
-    shellPrompt := ShellPrompt.buildShellPrompt,
-
-    testFrameworks += TestFrameworks.Specs2,
-    parallelExecution in Test := false,
-
-    // Use when developing against a locally built play master
-    resolvers ++= Seq(
-      Resolver.file("Local Play Repository", file(Path.userHome.absolutePath + "/Lib/play2/repository/local"))(Resolver.ivyStylePatterns),
-      "Typesafe Releases" at "http://repo.typesafe.com/typesafe/releases/",
-      "Sonatype Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/"
-  ),
-
-    libraryDependencies ++= Seq(
-      "play" %% "play" % playVersion % "provided",
-      "org.imgscalr" % "imgscalr-lib" % "4.2",
-      "commons-io" % "commons-io" % "2.4",
-      "se.digiplant" %% "play-res" % "0.1-SNAPSHOT",
-
-      "play" %% "play-test" % playVersion % "test"
-    )
+  val pluginDependencies = Seq(
+    "org.imgscalr" % "imgscalr-lib" % "4.2",
+    "commons-io" % "commons-io" % "2.4",
+    "se.digiplant" %% "play-res" % "0.1-SNAPSHOT"
   )
+
+  lazy val res = PlayProject(pluginName, pluginVersion, pluginDependencies, mainLang = SCALA, settings = Defaults.defaultSettings ++ Publish.settings ++ Ls.settings)
+    .settings(
+      organization := "se.digiplant",
+      playPlugin := true,
+      shellPrompt := ShellPrompt.buildShellPrompt,
+
+      resolvers += "Sonatype Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
+    )
 }
 
 object Publish {
@@ -82,7 +68,7 @@ object ShellPrompt {
     (state: State) => {
       val currProject = Project.extract (state).currentProject.id
       "%s:%s:%s> ".format (
-        currProject, currBranch, Plugin.buildVersion
+        currProject, currBranch, Plugin.pluginVersion
       )
     }
   }
@@ -95,7 +81,7 @@ object Ls {
   lazy val settings = _root_.ls.Plugin.lsSettings ++ Seq(
     (description in lsync) := "Scalr plugin for Play Framework 2",
     licenses in lsync <<= licenses,
-    (tags in lsync) := Seq("play", "scalr"),
+    (tags in lsync) := Seq("play", "scalr", "resizing"),
     (docsUrl in lsync) := Some(new URL("https://github.com/digiPlant/play-scalr/wiki"))
   )
 }

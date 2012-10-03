@@ -5,7 +5,7 @@ import java.io.{OutputStream, File}
 import javax.imageio.ImageIO
 import java.awt.image.BufferedImage
 import util.Random
-import se.digiplant.resource.api.Resource
+import se.digiplant.res.api.Res
 import org.apache.commons.io.FilenameUtils
 
 class ScalrPlugin(implicit app: Application) extends Plugin {
@@ -33,7 +33,7 @@ class ScalrPlugin(implicit app: Application) extends Plugin {
       None
     } else {
       val cachePath = configuration.getString("cachedir").getOrElse("tmp/scalrcache")
-      val cachedImage = Resource.fileWithMeta(
+      val cachedImage = Res.fileWithMeta(
         filePath = FilenameUtils.concat(cachePath, file),
         meta = Seq(width.toString, height.toString, mode.toString)
       )
@@ -42,7 +42,7 @@ class ScalrPlugin(implicit app: Application) extends Plugin {
         Some(cachedImage)
       }.getOrElse {
         val resizedImage = resize(resourceFile, width, height, mode, method)
-        val resizedFilePath = Resource.saveWithMeta(
+        val resizedFilePath = Res.saveWithMeta(
           resizedImage,
           filePath = FilenameUtils.concat(cachePath, file),
           meta = Seq(width.toString, height.toString, mode.toString)
@@ -62,13 +62,13 @@ class ScalrPlugin(implicit app: Application) extends Plugin {
    * @param method Any of the Scalr Methods, The standard is the highest possible
    * @return a File if everything when well
    */
-  def getResource(fileuid: String, source: String = "default", width: Int, height: Int, mode: org.imgscalr.Scalr.Mode = org.imgscalr.Scalr.Mode.AUTOMATIC, method: org.imgscalr.Scalr.Method = org.imgscalr.Scalr.Method.ULTRA_QUALITY): Option[File] = {
+  def getRes(fileuid: String, source: String = "default", width: Int, height: Int, mode: org.imgscalr.Scalr.Mode = org.imgscalr.Scalr.Mode.AUTOMATIC, method: org.imgscalr.Scalr.Method = org.imgscalr.Scalr.Method.ULTRA_QUALITY): Option[File] = {
 
-    Resource.get(fileuid, source).flatMap { res =>
+    Res.get(fileuid, source).flatMap { res =>
 
       val cacheSource = configuration.getString("cache").getOrElse("scalrcache")
 
-      val cachedImage = Resource.get(
+      val cachedImage = Res.get(
         fileuid = res.getName,
         meta = Seq(width.toString, height.toString, mode.toString),
         source = cacheSource
@@ -78,13 +78,13 @@ class ScalrPlugin(implicit app: Application) extends Plugin {
         Some(cachedImage)
       }.getOrElse {
         val resizedImage = resize(res, width, height, mode, method)
-        val maybeFileUID = Resource.put(
+        val maybeFileUID = Res.put(
           resizedImage,
           cacheSource,
           filename = res.getName,
           meta = Seq(width.toString, height.toString, mode.toString)
         )
-        maybeFileUID.flatMap(uid => Resource.get(uid, cacheSource))
+        maybeFileUID.flatMap(uid => Res.get(uid, cacheSource))
       }
     }
   }

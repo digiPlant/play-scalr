@@ -4,7 +4,8 @@ import org.specs2.mutable.Specification
 import java.io.{FileInputStream, File}
 import org.apache.commons.io.IOUtils
 import javax.imageio.ImageIO
-import se.digiplant.resource.api.ResourcePlugin
+import se.digiplant.res.api.ResPlugin
+import se.digiplant.scalr.ScalrContext
 
 object ScalrPluginSpec extends Specification {
 
@@ -14,7 +15,7 @@ object ScalrPluginSpec extends Specification {
 
     "start" in {
       ctx.scalr must beAnInstanceOf[ScalrPlugin]
-      ctx.res must beAnInstanceOf[ResourcePlugin]
+      ctx.res must beAnInstanceOf[ResPlugin]
     }
 
     "resize image" in {
