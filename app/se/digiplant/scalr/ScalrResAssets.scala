@@ -88,8 +88,8 @@ object ScalrResAssets extends Controller {
   // Last modified
   private val lastModifieds = (new java.util.concurrent.ConcurrentHashMap[String, String]()).asScala
 
-  private def lastModifiedFor(file: File)(implicit app: Application): Option[String] = {
-    lastModifieds.get(file.getName).filter(_ => app.mode == Mode.Prod).orElse {
+  private def lastModifiedFor(file: File): Option[String] = {
+    lastModifieds.get(file.getName).filter(_ => Play.isProd).orElse {
       val lastModified = df.print({
         new java.util.Date(file.lastModified).getTime
       })
@@ -101,8 +101,8 @@ object ScalrResAssets extends Controller {
   // Etags
   private val etags = (new java.util.concurrent.ConcurrentHashMap[String, String]()).asScala
 
-  private def etagFor(file: File)(implicit app: Application): Option[String] = {
-    etags.get(file.getName).filter(_ => app.mode == Mode.Prod).orElse {
+  private def etagFor(file: File): Option[String] = {
+    etags.get(file.getName).filter(_ => Play.isProd).orElse {
       val maybeEtag = lastModifiedFor(file).map(_ + " -> " + file.getName).map("\"" + Codecs.sha1(_) + "\"")
       maybeEtag.foreach(etags.put(file.getName, _))
       maybeEtag
