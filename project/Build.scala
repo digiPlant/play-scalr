@@ -13,7 +13,7 @@ object Plugin extends Build {
     "se.digiplant" %% "play-res" % "0.1-SNAPSHOT"
   )
 
-  lazy val res = play.Project(pluginName, pluginVersion, pluginDependencies, settings = Defaults.defaultSettings ++ Publish.settings ++ Ls.settings)
+  lazy val scalr = play.Project(pluginName, pluginVersion, pluginDependencies, settings = Defaults.defaultSettings ++ Publish.settings ++ Ls.settings)
     .settings(
       organization := "se.digiplant",
       playPlugin := true,
