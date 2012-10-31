@@ -5,34 +5,27 @@ import play.Project._
 object Plugin extends Build {
 
   val pluginName = "play-scalr"
-  val pluginVersion = "0.1-SNAPSHOT"
+  val pluginVersion = "0.2-SNAPSHOT"
 
   val pluginDependencies = Seq(
     "org.imgscalr" % "imgscalr-lib" % "4.2",
-    "commons-io" % "commons-io" % "2.4",
-    "se.digiplant" %% "play-res" % "0.1-SNAPSHOT"
+    "se.digiplant" %% "play-res" % "0.2-SNAPSHOT"
   )
 
   lazy val scalr = play.Project(pluginName, pluginVersion, pluginDependencies, settings = Defaults.defaultSettings ++ Publish.settings ++ Ls.settings)
     .settings(
+      crossScalaVersions := Seq("2.9.1", "2.10.0-RC1"),
       organization := "se.digiplant",
       playPlugin := true,
       shellPrompt := ShellPrompt.buildShellPrompt,
-
-      resolvers += "Sonatype Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
+      resolvers += Resolver.sonatypeRepo("releases")
     )
 }
 
 object Publish {
   lazy val settings = Seq(
     publishMavenStyle := true,
-    publishTo <<= version { (v: String) =>
-      val nexus = "https://oss.sonatype.org/"
-      if (v.trim.endsWith("SNAPSHOT"))
-        Some("snapshots" at nexus + "content/repositories/snapshots")
-      else
-        Some("releases"  at nexus + "service/local/staging/deploy/maven2")
-    },
+    publishTo <<= version((v: String) => Some(Resolver.sonatypeRepo(if (v.trim.endsWith("SNAPSHOT")) "snapshots" else "releases"))),
     publishArtifact in Test := false,
     pomIncludeRepository := { _ => false },
     licenses := Seq("Apache 2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),

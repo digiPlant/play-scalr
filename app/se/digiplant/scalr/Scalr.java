@@ -2,7 +2,7 @@ package se.digiplant.scalr;
 
 import java.io.File;
 
-import static play.libs.Scala.orNull;
+import play.libs.*;
 
 public class Scalr {
 
@@ -17,7 +17,7 @@ public class Scalr {
      * @return a File if everything when well
      */
     public static File get(String path, String file, int width, int height, org.imgscalr.Scalr.Mode mode, org.imgscalr.Scalr.Method method) {
-        return orNull(se.digiplant.scalr.api.Scalr.get(path, file, width, height, mode, method, play.api.Play.unsafeApplication()));
+        return Scala.orNull(se.digiplant.scalr.api.Scalr.get(path, file, width, height, mode, method));
     }
 
     public static File get(String path, String file, int width, int height, org.imgscalr.Scalr.Mode mode) {
@@ -43,7 +43,7 @@ public class Scalr {
      * @return a File if everything when well
      */
     public static File getRes(String fileuid, String source, int width, int height, org.imgscalr.Scalr.Mode mode, org.imgscalr.Scalr.Method method) {
-        return orNull(se.digiplant.scalr.api.Scalr.getRes(fileuid, source, width, height, mode, method, play.api.Play.unsafeApplication()));
+        return Scala.orNull(se.digiplant.scalr.api.Scalr.getRes(fileuid, source, width, height, mode, method));
     }
 
     public static File getRes(String fileuid, String source, int width, int height, org.imgscalr.Scalr.Mode mode) {
