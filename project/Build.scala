@@ -18,7 +18,22 @@ object Plugin extends Build {
       organization := "se.digiplant",
       playPlugin := true,
       shellPrompt := ShellPrompt.buildShellPrompt,
-      resolvers += Resolver.sonatypeRepo("releases")
+      resolvers += Resolver.sonatypeRepo("releases"),
+
+      // Used to overwrite play deps depending on scala version
+      libraryDependencies ~= { _.filter(_.organization != "play") },
+      libraryDependencies <++= (scalaVersion) { scalaVersion =>
+        if (scalaVersion == "2.9.1")
+          Seq(
+            "play" %% "play" % "2.0.4" % "provided",
+            "play" %% "play-test" % "2.0.4" % "test"
+          )
+        else
+          Seq(
+            "play" %% "play" % play.core.PlayVersion.current % "provided",
+            "play" %% "play-test" % play.core.PlayVersion.current % "test"
+          )
+      }
     )
 }
 
