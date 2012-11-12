@@ -5,22 +5,16 @@
 ## Add plugin to dependencies
 ```scala
 val appDependencies = Seq(
-	"se.digiplant" %% "play-scalr" % "0.1-SNAPSHOT"
+	"se.digiplant" %% "play-scalr" % "0.2-SNAPSHOT"
 )
 
-val root = PlayProject(appName, appVersion, appDependencies, mainLang = JAVA).settings(
+val root = PlayProject(appName, appVersion, appDependencies, mainLang = SCALA).settings(
   resolvers += "OSS Sonatype Snapshots" at "http://oss.sonatype.org/content/repositories/snapshots/",
   // To simplify the reverse routing we can import the digiPlant namespace
   templatesImport ++= Seq(
     "se.digiplant._"
   )
 )
-```
-
-## Add to `conf/play.plugins`
-```
-2000:se.digiplant.res.api.ResPlugin
-2001:se.digiplant.scalr.api.ScalrPlugin
 ```
 
 ## Add to `conf/application.conf`
@@ -46,7 +40,6 @@ GET    /res/:width/:height/:file      se.digiplant.scalr.ScalrResAssets.at(file,
 GET    /scalr/:width/:height/*file    se.digiplant.scalr.ScalrAssets.at(path="/public/images", file, width: Int, height: Int)
 
 ```
-
 
 # Usage
 
