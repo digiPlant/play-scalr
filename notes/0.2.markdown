@@ -1,3 +1,4 @@
 # Version 0.2
 Makeover so that it's no longer a play plugin but a static library, with configuration possibilities.
+forked imgscalr and imported it, since it's no longer maintained
 
