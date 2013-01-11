@@ -1,7 +1,7 @@
 package se.digiplant.scalr;
 
+import se.digiplant.scalr.api.Resizer;
 import java.io.File;
-
 import play.libs.*;
 
 public class Scalr {
@@ -16,12 +16,12 @@ public class Scalr {
      * @param method Any of the Scalr Methods, The standard is the highest possible
      * @return a File if everything when well
      */
-    public static File get(String path, String file, int width, int height, org.imgscalr.Scalr.Mode mode, org.imgscalr.Scalr.Method method) {
+    public static File get(String path, String file, int width, int height, Resizer.Mode mode, Resizer.Method method) {
         return Scala.orNull(se.digiplant.scalr.api.Scalr.get(path, file, width, height, mode, method));
     }
 
-    public static File get(String path, String file, int width, int height, org.imgscalr.Scalr.Mode mode) {
-        return get(path, file, width, height, mode, org.imgscalr.Scalr.Method.ULTRA_QUALITY);
+    public static File get(String path, String file, int width, int height, Resizer.Mode mode) {
+        return get(path, file, width, height, mode, Resizer.Method.ULTRA_QUALITY);
     }
 
     public static File get(String path, String file, int width, int height) {
@@ -42,12 +42,12 @@ public class Scalr {
      * @param method Any of the Scalr Methods, The standard is the highest possible
      * @return a File if everything when well
      */
-    public static File getRes(String fileuid, String source, int width, int height, org.imgscalr.Scalr.Mode mode, org.imgscalr.Scalr.Method method) {
+    public static File getRes(String fileuid, String source, int width, int height, Resizer.Mode mode, Resizer.Method method) {
         return Scala.orNull(se.digiplant.scalr.api.Scalr.getRes(fileuid, source, width, height, mode, method));
     }
 
-    public static File getRes(String fileuid, String source, int width, int height, org.imgscalr.Scalr.Mode mode) {
-        return getRes(fileuid, source, width, height, mode, org.imgscalr.Scalr.Method.ULTRA_QUALITY);
+    public static File getRes(String fileuid, String source, int width, int height, Resizer.Mode mode) {
+        return getRes(fileuid, source, width, height, mode, Resizer.Method.ULTRA_QUALITY);
     }
 
     public static File getRes(String fileuid, String source, int width, int height) {

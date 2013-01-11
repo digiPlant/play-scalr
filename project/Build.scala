@@ -8,7 +8,6 @@ object Plugin extends Build {
   val pluginVersion = "0.2-SNAPSHOT"
 
   val pluginDependencies = Seq(
-    "org.imgscalr" % "imgscalr-lib" % "4.2",
     "se.digiplant" %% "play-res" % "0.2-SNAPSHOT"
   )
 

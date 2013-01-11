@@ -1,5 +1,6 @@
 package se.digiplant.scalr
 
+import api.Resizer
 import play.api._
 import play.api.mvc._
 import play.api.libs._
@@ -39,7 +40,7 @@ object ScalrAssets extends Controller {
    */
   def at(path: String, file: String, width: Int, height: Int = 0, mode: String = "automatic"): Action[AnyContent] = Action { request =>
 
-    val modeEnum: org.imgscalr.Scalr.Mode = org.imgscalr.Scalr.Mode.valueOf(mode.toUpperCase)
+    val modeEnum: Resizer.Mode = Resizer.Mode.valueOf(mode.toUpperCase)
 
     def parseDate(date: String): Option[java.util.Date] = {
       try {
@@ -51,7 +52,7 @@ object ScalrAssets extends Controller {
       }
     }
 
-    api.Scalr.get(path, file, width, height, modeEnum, org.imgscalr.Scalr.Method.ULTRA_QUALITY).map { resizedImage =>
+    api.Scalr.get(path, file, width, height, modeEnum, Resizer.Method.ULTRA_QUALITY).map { resizedImage =>
       request.headers.get(IF_NONE_MATCH).flatMap {
         ifNoneMatch => etagFor(resizedImage).filter(_ == ifNoneMatch)
       }.map(_ => NotModified).getOrElse {
@@ -84,6 +85,16 @@ object ScalrAssets extends Controller {
       NotFound
     }
   }
+
+  /**
+   * Resize and crops and caches images stored in play-res
+   * @param path Path relative to play app
+   * @param file Filepath of the file
+   * @param width Width of resized image
+   * @param height Height of resized image
+   * @return A resized image
+   */
+  def crop(path: String, file: String, width: Int, height: Int = 0) = at(path, file, width, height, "crop")
 
   // Last modified
   private val lastModifieds = (new java.util.concurrent.ConcurrentHashMap[String, String]()).asScala

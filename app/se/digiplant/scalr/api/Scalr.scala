@@ -24,7 +24,7 @@ object Scalr {
    * @param method Any of the Scalr Methods, The standard is the highest possible
    * @return a File if everything when well
    */
-  def get(path: String, file: String, width: Int, height: Int, mode: org.imgscalr.Scalr.Mode = org.imgscalr.Scalr.Mode.AUTOMATIC, method: org.imgscalr.Scalr.Method = org.imgscalr.Scalr.Method.ULTRA_QUALITY): Option[File] = {
+  def get(path: String, file: String, width: Int, height: Int, mode: Resizer.Mode = Resizer.Mode.AUTOMATIC, method: Resizer.Method = Resizer.Method.ULTRA_QUALITY): Option[File] = {
 
     val resourceName = Option(path + "/" + file).map(name => if (name.startsWith("/")) name else ("/" + name)).get
     val resourceFile = Play.getFile(resourceName)
@@ -62,7 +62,7 @@ object Scalr {
    * @param method Any of the Scalr Methods, The standard is the highest possible
    * @return a File if everything when well
    */
-  def getRes(fileuid: String, source: String = "default", width: Int, height: Int, mode: org.imgscalr.Scalr.Mode = org.imgscalr.Scalr.Mode.AUTOMATIC, method: org.imgscalr.Scalr.Method = org.imgscalr.Scalr.Method.ULTRA_QUALITY): Option[File] = {
+  def getRes(fileuid: String, source: String = "default", width: Int, height: Int, mode: Resizer.Mode = Resizer.Mode.AUTOMATIC, method: Resizer.Method = Resizer.Method.ULTRA_QUALITY): Option[File] = {
 
     Res.get(fileuid, source).flatMap { res =>
 
@@ -98,10 +98,10 @@ object Scalr {
    * @param method Any of the Scalr Methods, The standard is the highest possible
    * @return A resized file
    */
-  def resize(file: File, width: Int, height: Int, mode: org.imgscalr.Scalr.Mode = org.imgscalr.Scalr.Mode.AUTOMATIC, method: org.imgscalr.Scalr.Method = org.imgscalr.Scalr.Method.ULTRA_QUALITY): File = {
+  def resize(file: File, width: Int, height: Int, mode: Resizer.Mode = Resizer.Mode.AUTOMATIC, method: Resizer.Method = Resizer.Method.ULTRA_QUALITY): File = {
     val image = ImageIO.read(file)
-    //val resized = org.imgscalr.Scalr.resize(image, method, mode, width, height, org.imgscalr.Scalr.OP_ANTIALIAS)
-    val resized = org.imgscalr.Scalr.resize(image, method, mode, width, height)
+    //val resized = Resizer.resize(image, method, mode, width, height, Resizer.OP_ANTIALIAS)
+    val resized = Resizer.resize(image, method, mode, width, height)
     val ext = if (image.getType == BufferedImage.TYPE_INT_RGB) "jpg" else "png"
     val tmp = File.createTempFile(Random.nextString(20), ext)
     ImageIO.write(resized, ext.toUpperCase, tmp)
@@ -117,10 +117,10 @@ object Scalr {
    * @param method Any of the Scalr Methods, The standard is the highest possible
    * @return A stream that we can pipe directly to the browser
    */
-  def resizeToStream(file: File, width: Int, height: Int, mode: org.imgscalr.Scalr.Mode = org.imgscalr.Scalr.Mode.AUTOMATIC, method: org.imgscalr.Scalr.Method = org.imgscalr.Scalr.Method.ULTRA_QUALITY): OutputStream = {
+  def resizeToStream(file: File, width: Int, height: Int, mode: Resizer.Mode = Resizer.Mode.AUTOMATIC, method: Resizer.Method = Resizer.Method.ULTRA_QUALITY): OutputStream = {
     val image = ImageIO.read(file)
-    //val resized = org.imgscalr.Scalr.resize(image, method, mode, width, height, org.imgscalr.Scalr.OP_ANTIALIAS)
-    val resized = org.imgscalr.Scalr.resize(image, method, mode, width, height)
+    //val resized = Resizer.resize(image, method, mode, width, height, Resizer.OP_ANTIALIAS)
+    val resized = Resizer.resize(image, method, mode, width, height)
     val ext = if (image.getType == BufferedImage.TYPE_INT_RGB) "jpg" else "png"
     val out: OutputStream = null
     ImageIO.write(resized, ext.toUpperCase, out)
