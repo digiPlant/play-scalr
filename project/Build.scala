@@ -5,10 +5,10 @@ import play.Project._
 object Plugin extends Build {
 
   val pluginName = "play-scalr"
-  val pluginVersion = "0.2-SNAPSHOT"
+  val pluginVersion = "1.0"
 
   val pluginDependencies = Seq(
-    "se.digiplant" %% "play-res" % "0.2-SNAPSHOT"
+    "se.digiplant" %% "play-res" % "1.0"
   )
 
   lazy val scalr = play.Project(pluginName, pluginVersion, pluginDependencies, settings = Defaults.defaultSettings ++ Publish.settings ++ Ls.settings)
@@ -39,7 +39,13 @@ object Plugin extends Build {
 object Publish {
   lazy val settings = Seq(
     publishMavenStyle := true,
-    publishTo <<= version((v: String) => Some(Resolver.sonatypeRepo(if (v.trim.endsWith("SNAPSHOT")) "snapshots" else "releases"))),
+    publishTo <<= version { (v: String) =>
+      val nexus = "https://oss.sonatype.org/"
+      if (v.trim.endsWith("SNAPSHOT"))
+        Some("snapshots" at nexus + "content/repositories/snapshots")
+      else
+        Some("releases"  at nexus + "service/local/staging/deploy/maven2")
+    },
     publishArtifact in Test := false,
     pomIncludeRepository := { _ => false },
     licenses := Seq("Apache 2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
@@ -86,9 +92,9 @@ object Ls {
   import _root_.ls.Plugin.LsKeys._
 
   lazy val settings = _root_.ls.Plugin.lsSettings ++ Seq(
-    (description in lsync) := "Scalr plugin for Play Framework 2",
+    (description in lsync) := "Image resizing plugin for Play Framework 2",
     licenses in lsync <<= licenses,
-    (tags in lsync) := Seq("play", "scalr", "resizing"),
+    (tags in lsync) := Seq("play", "scalr", "resizing", "image", "resource"),
     (docsUrl in lsync) := Some(new URL("https://github.com/digiPlant/play-scalr/wiki"))
   )
 }

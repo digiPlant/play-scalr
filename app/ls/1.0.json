@@ -1,0 +1,25 @@
+{
+  "organization" : "se.digiplant",
+  "name" : "play-scalr",
+  "version" : "1.0",
+  "description" : "Image resizing plugin for Play Framework 2",
+  "site" : "https://github.com/digiPlant/play-scalr",
+  "tags" : [ "play", "scalr", "resizing", "image", "resource" ],
+  "docs" : "https://github.com/digiPlant/play-scalr/wiki",
+  "resolvers" : [ "https://oss.sonatype.org/content/repositories/releases" ],
+  "dependencies" : [ {
+    "organization" : "se.digiplant",
+    "name" : "play-res",
+    "version" : "1.0"
+  }, {
+    "organization" : "play",
+    "name" : "play",
+    "version" : "2.*"
+  } ],
+  "scalas" : [ "2.9.1", "2.10.0" ],
+  "licenses" : [ {
+    "name" : "Apache 2.0",
+    "url" : "http://www.apache.org/licenses/LICENSE-2.0"
+  } ],
+  "sbt" : false
+}

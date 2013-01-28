@@ -6,11 +6,10 @@ image resizing utilizing play-res to cache files locally
 ## Add plugin to dependencies
 ```scala
 val appDependencies = Seq(
-	"se.digiplant" %% "play-scalr" % "0.2-SNAPSHOT"
+	"se.digiplant" %% "play-scalr" % "1.0"
 )
 
 val root = PlayProject(appName, appVersion, appDependencies, mainLang = SCALA).settings(
-  resolvers += "OSS Sonatype Snapshots" at "http://oss.sonatype.org/content/repositories/snapshots/",
   // To simplify the reverse routing we can import the digiPlant namespace
   templatesImport ++= Seq(
     "se.digiplant._"
