@@ -1,0 +1,22 @@
+@(images: List[Image])
+
+@main() {
+    <h3>A List</h3>
+    <ul class="thumbnails">
+        @for(image <- images){
+            <li>
+                <img class="thumbnail" src="@routes.Images.profile(image.id)" />
+            </li>
+        }
+    </ul>
+
+    @helper.form(
+        routes.Application.upload,
+        'action -> "post",
+        'enctype -> "multipart/form-data",
+        'class -> "form-actions"
+    ){
+        <input type="file" multiple />
+        <input type="submit" class="btn btn-primary" value="Upload" />
+    }
+}

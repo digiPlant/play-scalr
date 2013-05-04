@@ -1,0 +1,26 @@
+@(beaches: List[Beach], firstBeach: Beach)
+
+@main() {
+    <h3>A List</h3>
+    <ul class="thumbnails">
+        @for(beach <- beaches){
+            <li>
+                <a class="thumbnail" href="@routes.Application.view(beach.id)">
+                    <img src="@routes.Images.crop(beach.image.id, 200, 200)" />
+                </a>
+            </li>
+        }
+    </ul>
+
+    <h3>Single image using predefined method</h3>
+    <img class="thumbnail" src="@routes.Images.thumb(firstBeach.image.id)" />
+
+    <h3>Call the Scalr method directly</h3>
+    <img class="thumbnail" src="@scalr.routes.ScalrResAssets.at(firstBeach.image.id, 200, 300)" />
+
+    <h3>Call the Scalr crop method directly</h3>
+    <img class="thumbnail" src="@scalr.routes.ScalrResAssets.crop(firstBeach.image.id, 200, 200)" />
+
+    <h3>Upload Profile Image (Not Finished)</h3>
+    <a class="btn btn-primary" href="@routes.Application.images">Profile Images</a>
+}

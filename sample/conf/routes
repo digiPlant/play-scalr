@@ -1,0 +1,40 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET     /                                               controllers.Application.index
+GET     /image/:id                                      controllers.Application.view(id)
+GET     /profileimages                                  controllers.Application.images
+POST    /uploadimage                                    controllers.Application.upload
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file                                   controllers.Assets.at(path="/public", file)
+
+
+
+#
+#   Calling the scalr assets controller directly
+#
+
+# Image scaling for play-res plugin using the default source names default
+# If you are only going to have one source you can omit it and it will use "default"
+GET    /scalr/default/:width/:height/:file              se.digiplant.scalr.ScalrResAssets.at(file, width: Int, height: Int)
+
+# We also have a built in route for the crop mode since this is the most used one.
+GET    /scalr/defaultcrop/:width/:height/:file  se.digiplant.scalr.ScalrResAssets.crop(file, width: Int, height: Int)
+
+# Image resizing for any folder specified as path parameter (will cache thumbnails using play-res plugin)
+GET    /scalr/public/:width/:height/*file               se.digiplant.scalr.ScalrAssets.at(path="/public/images", file, width: Int, height: Int)
+
+
+#
+#   Or we can create our own controller and create our own reverse routing for the images (preferred)
+#   Because it's easier to remember the reverse routes and we can add more special images sizes using something like the below:
+#
+
+GET    /scalr/at/:width/:height/*file                   controllers.Images.at(file, width: Int, height: Int)
+GET    /scalr/crop/:width/:height/*file                 controllers.Images.crop(file, width: Int, height: Int)
+GET    /scalr/thumb/*file                               controllers.Images.thumb(file)
+
+GET    /scalr/profile/*file                             controllers.Images.profile(file)
