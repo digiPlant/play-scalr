@@ -25,7 +25,7 @@ public class Scalr {
     }
 
     public static File get(String path, String file, int width, int height) {
-        return get(path, file, width, height);
+        return get(path, file, width, height, Resizer.Mode.AUTOMATIC);
     }
 
     public static File get(String path, String file, int width) {
@@ -51,7 +51,7 @@ public class Scalr {
     }
 
     public static File getRes(String fileuid, String source, int width, int height) {
-        return getRes(fileuid, source, width, height);
+        return getRes(fileuid, source, width, height, Resizer.Mode.AUTOMATIC);
     }
 
     public static File getRes(String fileuid, String source, int width) {
