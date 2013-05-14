@@ -4,8 +4,8 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("releases")
 )
 
-addSbtPlugin("play" % "sbt-plugin" % "2.1-RC2")
+addSbtPlugin("play" % "sbt-plugin" % "2.1.1")
 
-addSbtPlugin("com.typesafe.sbt" % "sbt-pgp" % "0.7")
+addSbtPlugin("com.typesafe.sbt" % "sbt-pgp" % "0.8")
 
 addSbtPlugin("me.lessis" % "ls-sbt" % "0.1.2")

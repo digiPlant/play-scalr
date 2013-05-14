@@ -1,7 +1,7 @@
 package se.digiplant.scalr
 
 import org.specs2.specification.{BeforeAfterAround, Scope}
-import org.specs2.execute.Result
+import org.specs2.execute.{AsResult, Result}
 import play.api.test._
 import play.api.test.Helpers._
 import java.io.File
@@ -17,9 +17,9 @@ class ScalrContext(val app: FakeApplication = new FakeApplication(
   )
 )) extends BeforeAfterAround with TempFile {
 
-  implicit val implicitApp = app
+  implicit def implicitApp = app
 
-  def around[T](t: => T)(implicit evidence: (T) => Result) = running(app)(t)
+  override def around[T: AsResult](t: => T): Result = Helpers.running(app)(AsResult(t))
 
   def before {
   }
@@ -30,8 +30,8 @@ class ScalrContext(val app: FakeApplication = new FakeApplication(
 }
 
 trait TempFile extends Scope {
-  val tmp = new File("tmp")
-  val logo = new File("test/resources/digiPlant.jpg")
+  lazy val tmp = new File("tmp")
+  lazy val logo = new File("test/resources/digiPlant.jpg")
 
   def testFile: File = {
     tmp.mkdir()
