@@ -5,7 +5,7 @@
 ## Add plugin to dependencies
 ```scala
 val appDependencies = Seq(
-	"se.digiplant" %% "play-scalr" % "1.0"
+	"se.digiplant" %% "play-scalr" % "1.0.1"
 )
 
 val root = PlayProject(appName, appVersion, appDependencies, mainLang = SCALA).settings(

@@ -8,7 +8,7 @@ object ApplicationBuild extends Build {
   val appVersion      = "1.0-SNAPSHOT"
 
   val appDependencies = Seq(
-    "se.digiplant" %% "play-scalr" % "1.0",
+    "se.digiplant" %% "play-scalr" % "1.0.1",
     "org.reactivemongo" %% "play2-reactivemongo" % "0.9"
   )
 

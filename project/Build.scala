@@ -5,10 +5,10 @@ import play.Project._
 object Plugin extends Build {
 
   val pluginName = "play-scalr"
-  val pluginVersion = "1.0"
+  val pluginVersion = "1.0.1"
 
   val pluginDependencies = Seq(
-    "se.digiplant" %% "play-res" % "1.0"
+    "se.digiplant" %% "play-res" % "1.0.1"
   )
 
   lazy val scalr = play.Project(pluginName, pluginVersion, pluginDependencies, settings = Defaults.defaultSettings ++ Publish.settings ++ Ls.settings)
