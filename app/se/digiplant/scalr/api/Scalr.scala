@@ -1,7 +1,7 @@
 package se.digiplant.scalr.api
 
 import play.api._
-import java.io.{OutputStream, File}
+import java.io.{FileInputStream, OutputStream, File}
 import org.apache.commons.io.FilenameUtils
 import javax.imageio.ImageIO
 import java.awt.image.BufferedImage
@@ -102,7 +102,7 @@ object Scalr {
     val image = ImageIO.read(file)
     //val resized = Resizer.resize(image, method, mode, width, height, Resizer.OP_ANTIALIAS)
     val resized = Resizer.resize(image, method, mode, width, height)
-    val ext = if (image.getType == BufferedImage.TYPE_INT_RGB) "jpg" else "png"
+    val ext = guessImageFormat(file)
     val tmp = File.createTempFile(Random.nextString(20), ext)
     ImageIO.write(resized, ext.toUpperCase, tmp)
     tmp
@@ -121,9 +121,28 @@ object Scalr {
     val image = ImageIO.read(file)
     //val resized = Resizer.resize(image, method, mode, width, height, Resizer.OP_ANTIALIAS)
     val resized = Resizer.resize(image, method, mode, width, height)
-    val ext = if (image.getType == BufferedImage.TYPE_INT_RGB) "jpg" else "png"
+    val ext = guessImageFormat(file)
     val out: OutputStream = null
     ImageIO.write(resized, ext.toUpperCase, out)
     out
+  }
+
+  /**
+   * Detect the image format "jpg" or "png"
+   * Done by reading the first bytes of the file to check if it correspond to a file format "signature"
+   * @see http://www.garykessler.net/library/file_sigs.html
+   * @param file The File we want to analyse
+   * @return A String representing the image format "jpg" or "png"
+   */
+  def guessImageFormat(file: File): String = {
+    val is = new FileInputStream(file)
+    val firstBytes = new Array[Byte](2)
+    is.read(firstBytes)
+    is.close
+    // A JPEG file always start with bytes FF D8
+    if (firstBytes(0) == 0xFF.asInstanceOf[Byte] && firstBytes(1) == 0xD8.asInstanceOf[Byte])
+      "jpg"
+    else
+      "png"
   }
 }
