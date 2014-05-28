@@ -44,7 +44,7 @@ object Image {
 
   def fromFilePart(part: play.api.mvc.MultipartFormData.FilePart[Files.TemporaryFile], source: String) = {
     val imageTypes = List("image/jpeg", "image/png", "image/gif")
-    assert(imageTypes.contains(part.contentType.getOrElse(""), "File must be of the following type: " + imageTypes.mkString(", ")))
+    assert(imageTypes.contains(part.contentType.getOrElse("")), "File must be of the following type: " + imageTypes.mkString(", "))
 
     new Image(
       id = Res.put(part, source, Seq.empty),
