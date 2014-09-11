@@ -1,5 +1,0 @@
-### Image resizing for Play 2
-
-* Plugin is now out of beta
-* Using custom version of Scalr which supports cropping
-* Play 2.1-RC2 compatible

@@ -1,3 +1,0 @@
-# Version 0.1
-Implemented Scalr so that you can resize images on the fly
-

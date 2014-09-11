@@ -1,10 +1,10 @@
 *.
 !.gitignore
 !.travis.yml
-
 tmp
 target
-
 /project/sonatype.sbt
-
 logs
+.DS_Store
+.idea
+.idea_modules

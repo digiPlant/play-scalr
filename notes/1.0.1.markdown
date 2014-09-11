@@ -1,2 +1,0 @@
-* Fixed #2 - Function calling itself.
-* Updated to Play 2.1.1

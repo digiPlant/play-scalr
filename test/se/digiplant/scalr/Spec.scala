@@ -1,6 +1,7 @@
 package se.digiplant.scalr
 
-import org.specs2.specification.{BeforeAfterAround, Scope}
+import org.specs2.mutable.Around
+import org.specs2.specification.Scope
 import org.specs2.execute.{AsResult, Result}
 import play.api.test._
 import play.api.test.Helpers._
@@ -8,24 +9,23 @@ import java.io.File
 import org.apache.commons.io.FileUtils
 import util.Random
 
-class ScalrContext(val app: FakeApplication = new FakeApplication(
-  additionalConfiguration = Map(
-    ("res.default" -> "tmp/default"),
-    ("res.scalrcache" -> "tmp/scalrcache"),
-    ("scalr.cache" -> "scalrcache"),
-    ("scalr.cachedir" -> "tmp/scalrcachedir")
+trait ScalrContext extends Around with TempFile {
+
+  implicit val app: FakeApplication = new FakeApplication(
+    additionalConfiguration = Map(
+      "res.default" -> "tmp/default",
+      "res.scalrcache" -> "tmp/scalrcache",
+      "scalr.cache" -> "scalrcache",
+      "scalr.cachedir" -> "tmp/scalrcachedir"
+    )
   )
-)) extends BeforeAfterAround with TempFile {
 
-  implicit def implicitApp = app
+  def around[T : AsResult](t: =>T) = Helpers.running(app) {
+    val result = AsResult.effectively(t)
 
-  override def around[T: AsResult](t: => T): Result = Helpers.running(app)(AsResult(t))
-
-  def before {
-  }
-
-  def after {
     tmp.delete()
+
+    result
   }
 }
 

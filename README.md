@@ -5,16 +5,11 @@
 ## Add plugin to dependencies
 ```scala
 val appDependencies = Seq(
-	"se.digiplant" %% "play-scalr" % "1.0.1"
+	"se.digiplant" %% "play-scalr" % "1.1.0"
 )
 
-val root = PlayProject(appName, appVersion, appDependencies, mainLang = SCALA).settings(
-  resolvers += "OSS Sonatype Snapshots" at "http://oss.sonatype.org/content/repositories/snapshots/",
-  // To simplify the reverse routing we can import the digiPlant namespace
-  templatesImport ++= Seq(
-    "se.digiplant._"
-  )
-)
+// To simplify the reverse routing we can import the digiPlant namespace
+TwirlKeys.templateImports += "se.digiplant._"
 ```
 
 ## Add to `conf/application.conf`
@@ -33,8 +28,12 @@ scalr.cache=scalrcache
 
 ## Add to `conf/routes`
 ```
-# Image scaling for play-res plugin
+# Dynamic image scaling
 GET    /res/:width/:height/:file      se.digiplant.scalr.ScalrResAssets.at(file, width: Int, height: Int)
+
+# Fixed image scaling
+GET    /res/small/:file               se.digiplant.scalr.ScalrResAssets.at(file, width: Int = 50, height: Int = 50)
+GET    /res/medium/:file              se.digiplant.scalr.ScalrResAssets.at(file, width: Int = 200, height: Int = 200)
 
 # Image resizing for any folder specified as path parameter (will cache thumbnails using play-res plugin)
 GET    /scalr/:width/:height/*file    se.digiplant.scalr.ScalrAssets.at(path="/public/images", file, width: Int, height: Int)
