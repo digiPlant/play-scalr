@@ -5,7 +5,7 @@
 ## Add plugin to dependencies
 ```scala
 val appDependencies = Seq(
-	"se.digiplant" %% "play-scalr" % "1.1.0"
+	"se.digiplant" %% "play-scalr" % "1.1.2"
 )
 
 // To simplify the reverse routing we can import the digiPlant namespace

@@ -1,3 +1,6 @@
+# 1.1.2
+ * Publish against jdk7, since it causes problems otherwise
+
 # 1.1.0
 
  * Play 2.3.4 and scala 2.10.4 and 2.11.1
